@@ -340,12 +340,12 @@ def monitor(win_a: int, win_b: int, label_a: str, label_b: str,
             if md_file:
                 mtime = get_mtime(md_file)
                 if mtime is not None and mtime != last_mtime:
+                    fname = Path(md_file).name
                     for wid in (win_a, win_b):
                         info = infos[wid]
-                        if info and not info["busy"] and cooled(wid):
+                        if info:
                             fire(wid, info,
-                                 f"{Path(md_file).name} changed  →  firing window {labels[wid]}")
-                            break
+                                 f"{fname} changed  →  firing window {labels[wid]}")
                     last_mtime = mtime
 
             dash.draw(info_a, info_b)
