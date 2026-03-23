@@ -11,7 +11,7 @@ Requires Accessibility permission for Terminal.app:
 """
 
 from typing import Optional, Dict, Tuple, List
-import subprocess, time, os, sys
+import subprocess, time, os, sys, re
 from pathlib import Path
 
 DEFAULT_KEYS  = "r"
@@ -190,7 +190,9 @@ def setup_md_file() -> Optional[str]:
         raw = input("Path to .md file to watch  (Enter to skip): ").strip()
         if not raw:
             return None
-        p = Path(raw).expanduser().resolve()
+        # unescape shell-escaped characters (e.g. "\ " → " ", "\&" → "&")
+        cleaned = re.sub(r'\\(.)', r'\1', raw)
+        p = Path(cleaned).expanduser().resolve()
         if p.exists():
             print(f"  Watching: {p}")
             return str(p)
